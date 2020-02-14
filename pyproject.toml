@@ -3,7 +3,7 @@ requires = ["flit_core >=2,<3"]
 build-backend = "flit_core.buildapi"
 
 [tool.flit.metadata]
-module = "jolly_recipe_manager"
+module = "stray_recipe_manager"
 author = "Jonathan Robey"
 author-email = "class4kayaker@gmail.com"
 home-page = "https://github.com/class4kayaker/recipe_manager"

@@ -1,16 +1,16 @@
 import pytest
 
-import pint
-import jolly_recipe_manager.units
+import stray_recipe_manager.units
 
 
 @pytest.fixture(scope="module")
-def density_registry():
-    registry = jolly_recipe_manager.units.DensityRegistry()
-    ureg = registry.unit_registry
-    registry.add_density("water", ureg.parse_expression("240 g/cp"))
-    registry.add_density("rice", ureg.parse_expression("180 g/cp"))
+def unit_handler():
+    registry = stray_recipe_manager.units.UnitHandler()
     return registry
+
+
+def test_unit_handler():
+    registry = stray_recipe_manager.units.UnitHandler()
 
 
 @pytest.mark.parametrize(
@@ -23,15 +23,18 @@ def density_registry():
     ],
 )
 def test_conversion(
-    density_registry, in_quant_str, out_unit_str, identifier, ans_str
+    unit_handler, in_quant_str, out_unit_str, identifier, ans_str
 ):
-    ureg = density_registry.unit_registry
-    in_quant = ureg.parse_expression(in_quant_str)
+    unit_handler.add_density("water", unit_handler.parse_quantity("240 g/cp"))
+    unit_handler.add_density("rice", unit_handler.parse_quantity("180 g/cp"))
+    ureg = unit_handler.unit_registry
+    in_quant = unit_handler.parse_quantity(in_quant_str)
     out_unit = ureg.parse_units(out_unit_str)
-    ans = ureg.parse_expression(ans_str)
+    ans = unit_handler.parse_quantity(ans_str)
     assert (
-        density_registry.do_conversion(in_quant, out_unit, identifier) == ans
+        unit_handler.do_conversion(in_quant, out_unit, identifier) == ans
     )
+    unit_handler.clear_densities()
 
 
 @pytest.mark.parametrize(
@@ -43,14 +46,18 @@ def test_conversion(
     ],
 )
 def test_fail_conversion(
-    density_registry, in_quant_str, out_unit_str, identifier, exc_str
+    unit_handler, in_quant_str, out_unit_str, identifier, exc_str
 ):
-    ureg = density_registry.unit_registry
-    in_quant = ureg.parse_expression(in_quant_str)
+    unit_handler.add_density("water", unit_handler.parse_quantity("240 g/cp"))
+    unit_handler.add_density("rice", unit_handler.parse_quantity("180 g/cp"))
+
+    ureg = unit_handler.unit_registry
+    in_quant = unit_handler.parse_quantity(in_quant_str)
     out_unit = ureg.parse_units(out_unit_str)
     with pytest.raises(
-        jolly_recipe_manager.units.InvalidConversion
+        stray_recipe_manager.units.InvalidConversion
     ) as excinfo:
-        density_registry.do_conversion(in_quant, out_unit, identifier)
+        unit_handler.do_conversion(in_quant, out_unit, identifier)
 
     assert exc_str in str(excinfo.value)
+    unit_handler.clear_densities()
