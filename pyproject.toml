@@ -1,0 +1,18 @@
+[build-system]
+requires = ["flit_core >=2,<3"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "jolly_recipe_manager"
+author = "Jonathan Robey"
+author-email = "class4kayaker@gmail.com"
+home-page = "https://github.com/class4kayaker/recipe_manager"
+requires-python = "~=3.6"
+requires = [
+    "attr",
+    "pint",
+    "toml",
+]
+
+[tool.flit.entrypoints."console_scripts"]
+jolly_recipe_manager = "jolly_recipe_manager.cli:manager"

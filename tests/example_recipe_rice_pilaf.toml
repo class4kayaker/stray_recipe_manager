@@ -1,0 +1,88 @@
+name="Rice Pilaf"
+
+comments = "OK, but could be adjusted for more/better flavor"
+references = []
+
+tools = [
+    "Instant Pot",
+]
+
+[[ingredients]]
+item = "Orzo"
+quantity = "1/2 cup"
+identifier = "orzo"
+category = "solid_bulk"
+
+[[ingredients]]
+item = "White rice, rinsed"
+quantity = "1 cup"
+identifier = "rice"
+category = "solid_bulk"
+
+[[ingredients]]
+item = "Water"
+quantity = "3/2 cup"
+identifier = "water"
+category = "liquid_bulk"
+
+[[ingredients]]
+item = "Chicken stock"
+quantity = "1 cup"
+identifier = "chicken stock"
+category = "liquid_bulk"
+
+[[ingredients]]
+item = "Garlic powder"
+quantity = "1 tsp"
+identifier = "garlic powder"
+category = "seasoning"
+
+[[ingredients]]
+item = "Onion powder"
+quantity = "1/2 tsp"
+identifier = "onion powder"
+category = "seasoning"
+
+[[ingredients]]
+item = "Pepper"
+quantity = "1/2 tsp"
+identifier = "pepper"
+category = "seasoning"
+
+[[ingredients]]
+item = "Tumeric"
+quantity = "1/2 tsp"
+identifier = "tumeric"
+category = "seasoning"
+
+[[ingredients]]
+item = "Salt"
+quantity = "1/2 tsp"
+identifier = "salt"
+category = "seasoning"
+
+[[ingredients]]
+item = "Butter or neutral oil"
+quantity = "2 Tbsp"
+category = "seasoning"
+
+[[steps]]
+description = "Saute orzo and rice in oil until begin to brown"
+time = "8 min"
+
+[[steps]]
+description = "Cook in Instant Pot for 8 min on high"
+time = "12 min"
+
+[[steps]]
+description = "Let stand for 10 min, then vent"
+time = "10 min"
+
+[[steps]]
+description = "Open, fluff, and serve"
+
+[densities]
+orzo = "180 grams/cup"
+rice = "180 grams/cup"
+water = "240 grams/cup"
+"chicken stock" = "240 grams/cup"
