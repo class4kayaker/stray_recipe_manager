@@ -9,8 +9,17 @@ def unit_handler():
     return registry
 
 
-def test_unit_handler():
-    registry = stray_recipe_manager.units.UnitHandler()
+def test_unit_handler_densities():
+    unit_handler = stray_recipe_manager.units.UnitHandler()
+    ureg = unit_handler.unit_registry
+    rice_density = 180*ureg.g/ureg.cup
+    unit_handler.add_density("rice", rice_density)
+    assert unit_handler.get_density("rice") == rice_density
+    with pytest.raises(
+        stray_recipe_manager.units.InvalidData
+    ) as excinfo:
+        unit_handler.add_density("rice", 2*rice_density)
+    assert "New density" in str(excinfo.value)
 
 
 @pytest.mark.parametrize(
@@ -27,9 +36,9 @@ def test_conversion(
 ):
     unit_handler.add_density("water", unit_handler.parse_quantity("240 g/cp"))
     unit_handler.add_density("rice", unit_handler.parse_quantity("180 g/cp"))
-    ureg = unit_handler.unit_registry
+
     in_quant = unit_handler.parse_quantity(in_quant_str)
-    out_unit = ureg.parse_units(out_unit_str)
+    out_unit = unit_handler.parse_unit(out_unit_str)
     ans = unit_handler.parse_quantity(ans_str)
     assert (
         unit_handler.do_conversion(in_quant, out_unit, identifier) == ans
@@ -51,9 +60,8 @@ def test_fail_conversion(
     unit_handler.add_density("water", unit_handler.parse_quantity("240 g/cp"))
     unit_handler.add_density("rice", unit_handler.parse_quantity("180 g/cp"))
 
-    ureg = unit_handler.unit_registry
     in_quant = unit_handler.parse_quantity(in_quant_str)
-    out_unit = ureg.parse_units(out_unit_str)
+    out_unit = unit_handler.parse_unit(out_unit_str)
     with pytest.raises(
         stray_recipe_manager.units.InvalidConversion
     ) as excinfo:
