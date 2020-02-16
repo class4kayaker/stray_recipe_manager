@@ -1,4 +1,5 @@
 import pint
+import toml
 import typing
 from stray_recipe_manager.units import UnitHandler
 from stray_recipe_manager.recipe import (
@@ -14,6 +15,24 @@ class UnitPreferences:
         # type: (UnitHandler) -> None
         self.unit_handler = unit_handler
         self.preferences = {}  # type: typing.Dict[str, pint.Unit]
+
+    def set_unit_preference(self, category, unit):
+        # type: (str, typing.Optional[pint.Unit]) -> None
+        if unit is not None:
+            self.preferences[category] = unit
+        else:
+            if category in self.preferences:
+                del self.preferences[category]
+
+    def get_unit_preference(self, category):
+        # type: (str) -> typing.Optional[pint.Unit]
+        return self.preferences.get(category, None)
+
+    def load_from_toml_file(self, io):
+        # type: (typing.TextIO) -> None
+        data = toml.load(io)
+        for k, v in data["units"].items():
+            self.set_unit_preference(k, self.unit_handler.parse_unit(v))
 
     def handle_ingredient(self, ingredient):
         # type: (Ingredient) -> pint.Quantity

@@ -33,7 +33,7 @@ class UnitHandler:
                 )
         return q
 
-    def parse_unit(self, unit, dimensionality):
+    def parse_unit(self, unit, dimensionality=None):
         # type: (str, typing.Optional[str]) -> pint.Quantity
         u = self.unit_registry.parse_units(unit)
         if dimensionality is not None:
