@@ -33,6 +33,18 @@ class UnitHandler:
                 )
         return q
 
+    def parse_unit(self, unit, dimensionality):
+        # type: (str, typing.Optional[str]) -> pint.Quantity
+        u = self.unit_registry.parse_units(unit)
+        if dimensionality is not None:
+            if not u.check(dimensionality):
+                raise InvalidData(
+                    f"Unit {unit} does not match required "
+                    f"dimensionality {dimensionality} "
+                    f"(actually {u.dimensionality})"
+                )
+        return u
+
     def add_density(self, item, density):
         # type: (str, pint.Quantity) -> None
         if item not in self.densities:
