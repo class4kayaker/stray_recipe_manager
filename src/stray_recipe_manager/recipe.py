@@ -5,7 +5,7 @@ import typing
 from stray_recipe_manager.units import UnitHandler
 
 
-@attr.s(frozen=True, slots=True)
+@attr.attrs(frozen=True, slots=True)
 class Ingredient(object):
     item = attr.ib(type=str, kw_only=True)
     quantity = attr.ib(type=pint.Quantity, kw_only=True)
@@ -20,7 +20,7 @@ class Ingredient(object):
         return cls(**data)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.attrs(frozen=True, slots=True)
 class RecipeStep(object):
     description = attr.ib(type=str, kw_only=True)
     group = attr.ib(default=None, type=typing.Optional[str], kw_only=True)
@@ -36,7 +36,7 @@ class RecipeStep(object):
         return cls(**data)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.attrs(frozen=True, slots=True)
 class Recipe(object):
     name = attr.ib(type=str, kw_only=True)
     ingredients = attr.ib(
@@ -64,7 +64,7 @@ class Recipe(object):
         return cls(**data)
 
 
-@attr.s(frozen=True, slots=True)
+@attr.attrs(frozen=True, slots=True)
 class CommentedRecipe(Recipe):
     comments = attr.ib(default=None, type=typing.Optional[str], kw_only=True)
     references = attr.ib(

@@ -9,10 +9,10 @@ author-email = "class4kayaker@gmail.com"
 home-page = "https://github.com/class4kayaker/recipe_manager"
 requires-python = "~=3.6"
 requires = [
-    "attr",
+    "attrs",
     "pint",
     "toml",
 ]
 
 [tool.flit.entrypoints."console_scripts"]
-jolly_recipe_manager = "jolly_recipe_manager.cli:manager"
+stray_recipe_manager = "stray_recipe_manager.cli:dispatch"

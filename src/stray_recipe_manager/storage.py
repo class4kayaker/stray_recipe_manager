@@ -2,7 +2,7 @@ import toml
 import attr
 import typing
 
-from stray_recipe_manager.recipe import Recipe
+from stray_recipe_manager.recipe import Recipe, CommentedRecipe
 from stray_recipe_manager.units import UnitHandler
 
 
@@ -19,7 +19,10 @@ class TOMLCoding:
                 k, self.unit_handler.parse_quantity(v, "[mass]/[length]**3")
             )
         del data["densities"]
-        return Recipe.from_dict(data, self.unit_handler)
+        if "comments" in data or "references" in data:
+            return CommentedRecipe.from_dict(data, self.unit_handler)
+        else:
+            return Recipe.from_dict(data, self.unit_handler)
 
     def load_densities_from_toml_file(self, toml_file):
         # type: (typing.TextIO) -> None
