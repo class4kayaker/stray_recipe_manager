@@ -93,8 +93,8 @@ class MarkdownWriter:
         for ingredient in recipe.ingredients:
             io.write("-    {}\n".format(self.format_ingredient(ingredient)))
         io.write("\n#### Procedure\n\n")
-        for step in recipe.steps:
-            io.write("-    {}\n".format(self.format_step(step)))
+        for i, step in enumerate(recipe.steps):
+            io.write("{:d})   {}\n".format(i+1, self.format_step(step)))
         if isinstance(recipe, CommentedRecipe):
             if len(recipe.references) > 0:
                 io.write("\n#### References\n\n")
