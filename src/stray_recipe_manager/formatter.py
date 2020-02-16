@@ -55,13 +55,10 @@ class MarkdownWriter:
         self.unit_preferences = unit_preferences
         self.scale_factor = 1.0
 
-    def set_scale_factor(self, scale_factor):
-        self.scale_factor = scale_factor
-
-    def format_ingredient(self, ingredient):
-        # type: (Ingredient) -> str
+    def format_ingredient(self, ingredient, scale_factor=1.0):
+        # type: (Ingredient, float) -> str
         converted_quantity = (
-            self.scale_factor
+            scale_factor
             * self.unit_preferences.handle_ingredient(ingredient)
         )
         if ingredient.notes is None:
@@ -78,8 +75,8 @@ class MarkdownWriter:
         else:
             return f"{step.description} ({step.time!s})"
 
-    def write_recipe(self, io, recipe):
-        # type: (typing.TextIO, Recipe) -> None
+    def write_recipe(self, io, recipe, scale_factor=1.0):
+        # type: (typing.TextIO, Recipe, float) -> None
         io.write(f"### {recipe.name}\n")
         if isinstance(recipe, CommentedRecipe):
             if recipe.comments is not None:

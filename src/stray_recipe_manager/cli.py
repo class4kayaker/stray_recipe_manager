@@ -15,8 +15,7 @@ def print_recipe(args):
     recipe = loader.load_recipe_from_toml_file(args.recipe_file)
 
     writer = MarkdownWriter(prefs)
-    writer.set_scale_factor(args.scale)
-    writer.write_recipe(sys.stdout, recipe)
+    writer.write_recipe(sys.stdout, recipe, scale_factor=args.scale)
 
 
 def parse_args(args):
@@ -27,7 +26,7 @@ def parse_args(args):
     subparsers = parser.add_subparsers()
 
     print_recipe_parser = subparsers.add_parser(
-        "print", description="Utility to nicely print recipe"
+        "print_recipe", description="Utility to nicely print recipe"
     )
 
     print_recipe_parser.add_argument(
