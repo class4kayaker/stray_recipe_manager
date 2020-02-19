@@ -58,8 +58,7 @@ class MarkdownWriter:
     def format_ingredient(self, ingredient, scale_factor=1.0):
         # type: (Ingredient, float) -> str
         converted_quantity = (
-            scale_factor
-            * self.unit_preferences.handle_ingredient(ingredient)
+            scale_factor * self.unit_preferences.handle_ingredient(ingredient)
         )
         if ingredient.notes is None:
             return f"{converted_quantity!s} {ingredient.item}"
@@ -91,7 +90,7 @@ class MarkdownWriter:
             io.write("-    {}\n".format(self.format_ingredient(ingredient)))
         io.write("\n#### Procedure\n\n")
         for i, step in enumerate(recipe.steps):
-            io.write("{:d})   {}\n".format(i+1, self.format_step(step)))
+            io.write("{:d})   {}\n".format(i + 1, self.format_step(step)))
         if isinstance(recipe, CommentedRecipe):
             if len(recipe.references) > 0:
                 io.write("\n#### References\n\n")

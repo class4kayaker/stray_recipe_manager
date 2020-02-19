@@ -50,6 +50,12 @@ identifier = "pepper"
 category = "seasoning"
 
 [[ingredients]]
+item = "Paprika"
+quantity = "1/2 tsp"
+identifier = "paprika"
+category = "seasoning"
+
+[[ingredients]]
 item = "Tumeric"
 quantity = "1/2 tsp"
 identifier = "tumeric"

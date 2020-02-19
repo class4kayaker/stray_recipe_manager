@@ -24,25 +24,26 @@ class UnitHandler:
     def parse_quantity(self, quantity, dimensionality=None):
         # type: (str, typing.Optional[str]) -> pint.Quantity
         q = self.unit_registry.parse_expression(quantity)
-        if dimensionality is not None:
-            if not q.check(dimensionality):
-                raise InvalidData(
-                    f"Quantity {quantity} does not match required "
-                    f"dimensionality {dimensionality} "
-                    f"(actually {q.dimensionality})"
-                )
+        if dimensionality is not None and not q.check(dimensionality):
+            raise InvalidData(
+                f"Quantity {quantity} does not match required "
+                f"dimensionality {dimensionality} "
+                f"(actually {q.dimensionality})"
+            )
         return q
 
     def parse_unit(self, unit, dimensionality=None):
         # type: (str, typing.Optional[str]) -> pint.Quantity
         u = self.unit_registry.parse_units(unit)
-        if dimensionality is not None:
-            if not u.check(dimensionality):
-                raise InvalidData(
-                    f"Unit {unit} does not match required "
-                    f"dimensionality {dimensionality} "
-                    f"(actually {u.dimensionality})"
-                )
+        if (dimensionality is not None) and (
+            not u.dimensionality
+            == self.unit_registry.get_dimensionality(dimensionality)
+        ):
+            raise InvalidData(
+                f"Unit {unit} does not match required "
+                f"dimensionality {dimensionality} "
+                f"(actually {u.dimensionality})"
+            )
         return u
 
     def add_density(self, item, density):
@@ -51,7 +52,7 @@ class UnitHandler:
             self.densities[item] = density
         else:
             curr_density = self.densities[item]
-            if abs(curr_density - density) > self.tolerance*curr_density:
+            if abs(curr_density - density) > self.tolerance * curr_density:
                 raise InvalidData(
                     f"New density for {item} ({density}) does not match "
                     f"earlier density ({curr_density})"

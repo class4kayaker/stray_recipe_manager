@@ -19,6 +19,11 @@ class Ingredient(object):
         data["quantity"] = unit_handler.parse_quantity(data["quantity"])
         return cls(**data)
 
+    def to_dict(self):
+        data = attr.asdict(self)
+        data["quantity"] = str(data["quantity"])
+        return data
+
 
 @attr.attrs(frozen=True, slots=True)
 class RecipeStep(object):
@@ -35,16 +40,18 @@ class RecipeStep(object):
             data["time"] = unit_handler.parse_quantity(data["time"], "[time]")
         return cls(**data)
 
+    def to_dict(self):
+        data = attr.asdict(self)
+        if self.time is not None:
+            data["time"] = str(data["time"])
+        return data
+
 
 @attr.attrs(frozen=True, slots=True)
 class Recipe(object):
     name = attr.ib(type=str, kw_only=True)
-    ingredients = attr.ib(
-        type=typing.List[Ingredient], kw_only=True
-    )
-    steps = attr.ib(
-        type=typing.List[RecipeStep], kw_only=True
-    )
+    ingredients = attr.ib(type=typing.List[Ingredient], kw_only=True)
+    steps = attr.ib(type=typing.List[RecipeStep], kw_only=True)
     tools = attr.ib(
         default=attr.Factory(list), type=typing.List[str], kw_only=True
     )
@@ -62,6 +69,12 @@ class Recipe(object):
             RecipeStep.from_dict(i, unit_handler) for i in data["steps"]
         ]
         return cls(**data)
+
+    def to_dict(self):
+        data = attr.asdict(self, recurse=False)
+        data["ingredients"] = [i.to_dict() for i in data["ingredients"]]
+        data["steps"] = [i.to_dict() for i in data["steps"]]
+        return data
 
 
 @attr.attrs(frozen=True, slots=True)

@@ -18,3 +18,6 @@ requires = [
 
 [tool.flit.entrypoints."console_scripts"]
 stray_recipe_manager = "stray_recipe_manager.cli:dispatch"
+
+[tool.black]
+line-length=79
