@@ -45,19 +45,21 @@ def test_unit_prefs():
                     )
                 ],
             ),
-            ("### Boiling Water\n"
-             "\n"
-             "#### Tools\n"
-             "\n"
-             "-    Saucepan\n"
-             "\n"
-             "#### Ingredients\n"
-             "\n"
-             "-    1.0 cup Water\n"
-             "\n"
-             "#### Procedure\n"
-             "\n"
-             "1)   Place water on stove until boiling\n")
+            (
+                "### Boiling Water\n"
+                "\n"
+                "#### Tools\n"
+                "\n"
+                "-    Saucepan\n"
+                "\n"
+                "#### Ingredients\n"
+                "\n"
+                "-    1.0 cup Water\n"
+                "\n"
+                "#### Procedure\n"
+                "\n"
+                "1)   Place water on stove until boiling\n"
+            ),
         ),
         (
             CommentedRecipe(
@@ -71,23 +73,25 @@ def test_unit_prefs():
                     )
                 ],
             ),
-            ("### Boiling Water\n"
-             "\n"
-             "#### Comments\n"
-             "\n"
-             "Utterly basic\n"
-             "\n"
-             "#### Tools\n"
-             "\n"
-             "-    Saucepan\n"
-             "\n"
-             "#### Ingredients\n"
-             "\n"
-             "-    1.0 cup Water\n"
-             "\n"
-             "#### Procedure\n"
-             "\n"
-             "1)   Place water on stove until boiling\n")
+            (
+                "### Boiling Water\n"
+                "\n"
+                "#### Comments\n"
+                "\n"
+                "Utterly basic\n"
+                "\n"
+                "#### Tools\n"
+                "\n"
+                "-    Saucepan\n"
+                "\n"
+                "#### Ingredients\n"
+                "\n"
+                "-    1.0 cup Water\n"
+                "\n"
+                "#### Procedure\n"
+                "\n"
+                "1)   Place water on stove until boiling\n"
+            ),
         ),
     ],
 )
