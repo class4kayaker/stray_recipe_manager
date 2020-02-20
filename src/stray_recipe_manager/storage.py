@@ -107,3 +107,11 @@ class DirectoryStorage:
             raise KeyError("No recipe for '{}'".format(recipe_key))
         with path.open("r") as f:
             return self.toml_coding.load_recipe_from_toml_file(f)
+
+    def write_recipe(self, recipe_key, recipe, overwrite=False):
+        # type: (str, Recipe, bool) -> None
+        path = self.recipe_dir / (recipe_key + ".toml")
+        if path.exists() and not overwrite:
+            raise KeyError("Recipe already exists, not overwriting")
+        with path.open("w") as f:
+            self.toml_coding.write_recipe_to_toml_file(f, recipe)

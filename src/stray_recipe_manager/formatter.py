@@ -28,6 +28,10 @@ class UnitPreferences:
         # type: (str) -> typing.Optional[pint.Unit]
         return self.preferences.get(category, None)
 
+    def clear_unit_preferences(self):
+        # type: () -> None
+        self.preferences = {}
+
     def load_from_toml_file(self, io):
         # type: (typing.TextIO) -> None
         data = toml.load(io)
