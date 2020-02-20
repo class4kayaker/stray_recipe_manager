@@ -4,7 +4,7 @@ import argparse
 from stray_recipe_manager import logger as root_logger
 from stray_recipe_manager.units import UnitHandler
 from stray_recipe_manager.storage import get_storage, TOMLCoding
-from stray_recipe_manager.formatter import MarkdownWriter, UnitPreferences
+from stray_recipe_manager.formatter import UnitPreferences, get_writer
 
 
 def print_recipe(args):
@@ -16,8 +16,8 @@ def print_recipe(args):
     loader = TOMLCoding(unit_handler)
     recipe = loader.load_recipe_from_toml_file(args.recipe_file)
 
-    writer = MarkdownWriter(prefs)
-    writer.write_recipe(sys.stdout, recipe, scale_factor=args.scale)
+    writer = get_writer(args.format)(prefs)
+    writer.write_standalone(sys.stdout, recipe, scale_factor=args.scale)
 
 
 def book_print(storage, args):
@@ -29,8 +29,8 @@ def book_print(storage, args):
     if args.prefs is not None:
         prefs.load_from_toml_file(args.prefs)
 
-    writer = MarkdownWriter(prefs)
-    writer.write_recipe(args.output, recipe, scale_factor=args.scale)
+    writer = get_writer(args.format)(prefs)
+    writer.write_standalone(args.output, recipe, scale_factor=args.scale)
 
 
 def book_dispatch(args):
@@ -62,6 +62,12 @@ def parse_args(args):
     def create_print_parser(parser_set):
         print_recipe_parser = parser_set.add_parser(
             "print_recipe", description="Utility to nicely print recipe"
+        )
+
+        print_recipe_parser.add_argument(
+            "--format",
+            help="Output format",
+            default="text/markdown",
         )
 
         print_recipe_parser.add_argument(
@@ -100,6 +106,12 @@ def parse_args(args):
     def recipe_book_print(parser_set):
         print_selected_recipe = parser_set.add_parser(
             "print", description="Print selected recipe from recipe book"
+        )
+
+        print_selected_recipe.add_argument(
+            "--format",
+            help="Output format",
+            default="text/markdown",
         )
 
         print_selected_recipe.add_argument(
