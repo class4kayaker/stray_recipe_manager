@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}{{ recipe_name }}{% endblock %}
+{% block body %}
+{{ recipe_text | safe }}
+<img src={{ recipe_qr }} alt="Recipe QR Code" />
+{% endblock %}

@@ -5,6 +5,7 @@ from stray_recipe_manager import logger as root_logger
 from stray_recipe_manager.units import UnitHandler
 from stray_recipe_manager.storage import get_storage, TOMLCoding
 from stray_recipe_manager.formatter import UnitPreferences, get_writer
+from stray_recipe_manager.server import create_app
 
 
 def print_recipe(args):
@@ -38,21 +39,41 @@ def book_dispatch(args):
     args.book_func(storage, args)
 
 
+def book_serve(args):
+    import socket
+    from werkzeug.serving import run_simple
+
+    host_ip = socket.gethostbyname(socket.gethostname())
+    host_socket = 5000
+    app = create_app(
+        storage_path=args.recipe_book, host_base=f"{host_ip}:{host_socket}",
+    )
+
+    run_simple(host_ip, host_socket, app)
+
+
 def parse_args(args):
+
     parser = argparse.ArgumentParser(
         description="Utility to handle recipe books"
     )
 
     parser.add_argument(
-        '-d', '--debug',
+        "-d",
+        "--debug",
         help="Print lots of debugging statements",
-        action="store_const", dest="loglevel", const=logging.DEBUG,
+        action="store_const",
+        dest="loglevel",
+        const=logging.DEBUG,
         default=logging.WARNING,
     )
     parser.add_argument(
-        '-v', '--verbose',
+        "-v",
+        "--verbose",
         help="Be verbose",
-        action="store_const", dest="loglevel", const=logging.INFO,
+        action="store_const",
+        dest="loglevel",
+        const=logging.INFO,
     )
 
     main_subparsers = parser.add_subparsers()
@@ -65,9 +86,7 @@ def parse_args(args):
         )
 
         print_recipe_parser.add_argument(
-            "--format",
-            help="Output format",
-            default="text/markdown",
+            "--format", help="Output format", default="text/markdown",
         )
 
         print_recipe_parser.add_argument(
@@ -109,9 +128,7 @@ def parse_args(args):
         )
 
         print_selected_recipe.add_argument(
-            "--format",
-            help="Output format",
-            default="text/markdown",
+            "--format", help="Output format", default="text/markdown",
         )
 
         print_selected_recipe.add_argument(
@@ -140,6 +157,19 @@ def parse_args(args):
         print_selected_recipe.set_defaults(book_func=book_print)
 
     recipe_book_print(book_subparsers)
+
+    def create_server_parser(parser_set):
+        server_parser = parser_set.add_parser(
+            "serve", description="Serve recipe book as web path"
+        )
+
+        server_parser.add_argument(
+            "recipe_book", help="Recipe book to work with"
+        )
+
+        server_parser.set_defaults(func=book_serve)
+
+    create_server_parser(main_subparsers)
 
     return parser.parse_args(args)
 
