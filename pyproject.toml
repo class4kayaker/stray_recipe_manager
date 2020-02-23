@@ -16,7 +16,6 @@ requires = [
     "toml",
     "werkzeug",
     "jinja2",
-    "qrcode",
 ]
 
 [tool.flit.entrypoints."console_scripts"]

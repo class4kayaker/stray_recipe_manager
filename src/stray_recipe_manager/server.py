@@ -1,7 +1,5 @@
 import io
 import logging
-import qrcode
-from qrcode.image.svg import SvgPathImage
 from werkzeug.wrappers import Request, Response
 from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import HTTPException, NotFound
@@ -30,7 +28,6 @@ class RecipeViewer:
             [
                 Rule("/", endpoint="view_index"),
                 Rule("/recipe/<recipe_name>.html", endpoint="view_recipe"),
-                Rule("/qr_recipe/<recipe_name>.svg", endpoint="recipe_qr"),
             ]
         )
 
@@ -46,15 +43,6 @@ class RecipeViewer:
         except HTTPException as e:
             return e
 
-    def on_recipe_qr(self, request, recipe_name):
-        img = qrcode.make(
-            f"http://{self.host_base}/recipe/{recipe_name}.html",
-            image_factory=SvgPathImage,
-        )
-        img_data = io.BytesIO()
-        img.save(img_data)
-        return Response(img_data.getvalue(), mimetype="image/svg+xml",)
-
     def on_view_index(self, request):
         return self.render_template(
             "recipe_index.html", recipes=self.storage.recipe_keys()
@@ -69,7 +57,6 @@ class RecipeViewer:
             formatter.write_recipe(recipe_text, recipe)
             return self.render_template(
                 "recipe.html",
-                recipe_qr=f"/qr_recipe/{recipe_name}.svg",
                 recipe_name=recipe.name,
                 recipe_text=recipe_text.getvalue(),
             )
