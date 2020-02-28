@@ -3,9 +3,12 @@ import pytest
 import stray_recipe_manager.units
 
 
+ureg = stray_recipe_manager.units.default_unit_registry
+
+
 @pytest.fixture(scope="module")
 def unit_handler():
-    registry = stray_recipe_manager.units.UnitHandler()
+    registry = stray_recipe_manager.units.UnitHandler(ureg)
     return registry
 
 
@@ -27,6 +30,22 @@ def test_unit_handler_densities(unit_handler):
     with pytest.raises(stray_recipe_manager.units.InvalidData) as excinfo:
         unit_handler.add_density("rice", 2 * rice_density)
     assert "New density" in str(excinfo.value)
+
+
+def test_unit_prefs():
+    unit_handler = stray_recipe_manager.units.UnitHandler(ureg)
+    unit_preferences = stray_recipe_manager.units.UnitPreferences(unit_handler)
+    assert unit_preferences.get_unit_preference("bulk_solid") is None
+    unit_preferences.set_unit_preference("bulk_solid", ureg.liter)
+    assert unit_preferences.get_unit_preference("bulk_solid") == ureg.liter
+    unit_preferences.set_unit_preference("bulk_solid", ureg.cup)
+    assert unit_preferences.get_unit_preference("bulk_solid") == ureg.cup
+    unit_preferences.set_unit_preference("bulk_solid", None)
+    assert unit_preferences.get_unit_preference("bulk_solid") is None
+    unit_preferences.set_unit_preference("bulk_solid", ureg.gram)
+    assert unit_preferences.get_unit_preference("bulk_solid") == ureg.gram
+    unit_preferences.clear_unit_preferences()
+    assert unit_preferences.get_unit_preference("bulk_solid") is None
 
 
 @pytest.mark.parametrize(

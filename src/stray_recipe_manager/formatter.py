@@ -52,7 +52,7 @@ class MarkdownWriter(BaseWriter):
                 io.write(f"-    {tool}\n")
         io.write("\n#### Ingredients\n\n")
         for ingredient in recipe.ingredients:
-            io.write("-    {}\n".format(clsl.format_ingredient(ingredient)))
+            io.write("-    {}\n".format(cls.format_ingredient(ingredient)))
         io.write("\n#### Procedure\n\n")
         for i, step in enumerate(recipe.steps):
             io.write("{:d})   {}\n".format(i + 1, cls.format_step(step)))
