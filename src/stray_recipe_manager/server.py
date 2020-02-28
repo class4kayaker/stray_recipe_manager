@@ -1,11 +1,11 @@
-import io
 import logging
 from werkzeug.wrappers import Request, Response
 from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import HTTPException, NotFound
 from werkzeug.middleware.shared_data import SharedDataMiddleware
 from stray_recipe_manager.storage import get_storage
-from stray_recipe_manager.formatter import UnitPreferences, HTMLWriter
+from stray_recipe_manager.units import UnitPreferences
+from stray_recipe_manager.recipe import present_recipe
 from jinja2 import BaseLoader, FileSystemLoader, PackageLoader, Environment
 
 
@@ -51,18 +51,12 @@ class RecipeViewer:
     def on_view_recipe(self, request, recipe_name):
         try:
             prefs = UnitPreferences(self.unit_handler)
-            formatter = HTMLWriter(prefs)
-            recipe = self.storage.get_recipe(recipe_name)
-            recipe_text = io.StringIO()
-            formatter.write_recipe(recipe_text, recipe)
-            return self.render_template(
-                "recipe.html",
-                recipe_name=recipe.name,
-                recipe_text=recipe_text.getvalue(),
-            )
         except KeyError as e:
 
             raise NotFound(str(e))
+        recipe = self.storage.get_recipe(recipe_name)
+        p_recipe = present_recipe(recipe, prefs, 1.0)
+        return self.render_template("recipe.html", recipe=p_recipe)
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)

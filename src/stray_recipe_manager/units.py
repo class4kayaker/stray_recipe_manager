@@ -1,4 +1,5 @@
 import pint
+import toml
 import typing
 
 default_unit_registry = pint.UnitRegistry()
@@ -93,3 +94,32 @@ class UnitHandler:
             ):
                 return (in_quantity * density).to(out_unit)
             raise InvalidConversion("Unable to convert")
+
+
+class UnitPreferences:
+    def __init__(self, unit_handler):
+        # type: (UnitHandler) -> None
+        self.unit_handler = unit_handler
+        self.preferences = {}  # type: typing.Dict[str, pint.Unit]
+
+    def set_unit_preference(self, category, unit):
+        # type: (str, typing.Optional[pint.Unit]) -> None
+        if unit is not None:
+            self.preferences[category] = unit
+        else:
+            if category in self.preferences:
+                del self.preferences[category]
+
+    def get_unit_preference(self, category):
+        # type: (str) -> typing.Optional[pint.Unit]
+        return self.preferences.get(category, None)
+
+    def clear_unit_preferences(self):
+        # type: () -> None
+        self.preferences = {}
+
+    def load_from_toml_file(self, io):
+        # type: (typing.TextIO) -> None
+        data = toml.load(io)
+        for k, v in data["units"].items():
+            self.set_unit_preference(k, self.unit_handler.parse_unit(v))

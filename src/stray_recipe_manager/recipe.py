@@ -2,7 +2,7 @@ import pint
 import attr
 import typing
 
-from stray_recipe_manager.units import UnitHandler
+from stray_recipe_manager.units import UnitHandler, UnitPreferences
 
 
 @attr.attrs(frozen=True, slots=True)
@@ -94,3 +94,31 @@ class CommentedRecipe(Recipe):
             RecipeStep.from_dict(i, unit_handler) for i in data["steps"]
         ]
         return cls(**data)
+
+
+def present_recipe(recipe, prefs, scale=1.0):
+    # type: (Recipe, UnitPreferences, float) -> Recipe
+    def mutate_ingredient(ingredient):
+        # type: (Ingredient) -> Ingredient
+        if ingredient.category is None:
+            n_unit = None
+        else:
+            n_unit = prefs.get_unit_preference(ingredient.category)
+        n_quantity = (
+            ingredient.quantity
+            if n_unit is None
+            else prefs.unit_handler.do_conversion(
+                ingredient.quantity, n_unit, ingredient.identifier
+            )
+        )
+        return Ingredient(
+            item=ingredient.item,
+            quantity=scale * n_quantity,
+            identifier=ingredient.identifier,
+            category=ingredient.category,
+            notes=ingredient.notes,
+        )
+
+    data = attr.asdict(recipe, recurse=False)
+    data["ingredients"] = [mutate_ingredient(i) for i in data["ingredients"]]
+    return recipe.__class__(**data)

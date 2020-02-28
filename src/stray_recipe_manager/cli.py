@@ -2,10 +2,11 @@ import sys
 import logging
 import argparse
 from stray_recipe_manager import logger as root_logger
-from stray_recipe_manager.units import UnitHandler
+from stray_recipe_manager.units import UnitHandler, UnitPreferences
 from stray_recipe_manager.storage import get_storage, TOMLCoding
-from stray_recipe_manager.formatter import UnitPreferences, get_writer
+from stray_recipe_manager.formatter import get_writer
 from stray_recipe_manager.server import create_app
+from stray_recipe_manager.recipe import present_recipe
 
 
 def print_recipe(args):
@@ -17,8 +18,9 @@ def print_recipe(args):
     loader = TOMLCoding(unit_handler)
     recipe = loader.load_recipe_from_toml_file(args.recipe_file)
 
-    writer = get_writer(args.format)(prefs)
-    writer.write_standalone(sys.stdout, recipe, scale_factor=args.scale)
+    p_recipe = present_recipe(recipe, prefs, args.scale)
+
+    get_writer(args.format).write_recipe(sys.stdout, p_recipe)
 
 
 def book_print(storage, args):
@@ -30,8 +32,9 @@ def book_print(storage, args):
     if args.prefs is not None:
         prefs.load_from_toml_file(args.prefs)
 
-    writer = get_writer(args.format)(prefs)
-    writer.write_standalone(args.output, recipe, scale_factor=args.scale)
+    p_recipe = present_recipe(recipe, prefs, args.scale)
+
+    get_writer(args.format).write_recipe(sys.stdout, p_recipe)
 
 
 def book_dispatch(args):

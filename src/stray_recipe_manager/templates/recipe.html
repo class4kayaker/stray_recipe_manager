@@ -1,5 +1,34 @@
 {% extends "layout.html" %}
-{% block title %}{{ recipe_name }}{% endblock %}
+{% block title %}{{ recipe.name }}{% endblock %}
 {% block body %}
-{{ recipe_text | safe }}
+<h3>{{ recipe.name }}</h3>
+{% if recipe.comments is defined and recipe.comments %}
+<h4>Comments</h4>
+
+<p>{{recipe.comments}}</p>
+{% endif %}
+{% if recipe.tools | length > 0 %}
+<h4>Tools</h4><ul>
+    {% for tool in recipe.tools %}
+    <li>{{ tool }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h4>Ingredients</h4><ul>
+    {% for ingredient in recipe.ingredients %}
+    <li>{{"{:.2f}".format(ingredient.quantity) }} {{ ingredient.item }}{% if ingredient.notes %}, {{ingredient.notes}} {% endif %}</li>
+    {% endfor %}
+</ul>
+<h4>Instructions</h4><ol>
+    {% for step in recipe.steps %}
+    <li>{{ step.description }}</li>
+    {% endfor %}
+</ol>
+{% if recipe.references is defined and recipe.references | length > 0 %}
+<h4>References</h4><ul>
+    {% for reference in recipe.references %}
+    <li>{{ reference }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 {% endblock %}
