@@ -50,6 +50,7 @@ class RecipeStep(object):
 @attr.attrs(frozen=True, slots=True)
 class Recipe(object):
     name = attr.ib(type=str, kw_only=True)
+    makes = attr.ib(type=Ingredient, kw_only=True)
     ingredients = attr.ib(type=typing.List[Ingredient], kw_only=True)
     steps = attr.ib(type=typing.List[RecipeStep], kw_only=True)
     tools = attr.ib(
@@ -62,6 +63,7 @@ class Recipe(object):
     @classmethod
     def from_dict(cls, data, unit_handler):
         # type: (typing.MutableMapping[str, typing.Any], UnitHandler) -> Recipe
+        data["makes"] = Ingredient.from_dict(data["makes"], unit_handler)
         data["ingredients"] = [
             Ingredient.from_dict(i, unit_handler) for i in data["ingredients"]
         ]
@@ -72,6 +74,7 @@ class Recipe(object):
 
     def to_dict(self):
         data = attr.asdict(self, recurse=False)
+        data["makes"] = data["makes"].to_dict()
         data["ingredients"] = [i.to_dict() for i in data["ingredients"]]
         data["steps"] = [i.to_dict() for i in data["steps"]]
         return data
@@ -87,6 +90,7 @@ class CommentedRecipe(Recipe):
     @classmethod
     def from_dict(cls, data, unit_handler):
         # type: (typing.MutableMapping[str, typing.Any], UnitHandler) -> Recipe
+        data["makes"] = Ingredient.from_dict(data["makes"], unit_handler)
         data["ingredients"] = [
             Ingredient.from_dict(i, unit_handler) for i in data["ingredients"]
         ]
@@ -120,5 +124,6 @@ def present_recipe(recipe, prefs, scale=1.0):
         )
 
     data = attr.asdict(recipe, recurse=False)
+    data["makes"] = mutate_ingredient(data["makes"])
     data["ingredients"] = [mutate_ingredient(i) for i in data["ingredients"]]
     return recipe.__class__(**data)

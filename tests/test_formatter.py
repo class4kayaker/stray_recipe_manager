@@ -19,8 +19,13 @@ ureg = stray_recipe_manager.units.default_unit_registry
         (
             Recipe(
                 name="Boiling Water",
+                makes=Ingredient(
+                    item="Boiling water", quantity=1.0 * ureg.cup
+                ),
                 tools=["Saucepan"],
-                ingredients=[Ingredient(item="Water", quantity=1. * ureg.cup,)],
+                ingredients=[
+                    Ingredient(item="Water", quantity=1.0 * ureg.cup,)
+                ],
                 steps=[
                     RecipeStep(
                         description="Place water on stove until boiling"
@@ -29,6 +34,10 @@ ureg = stray_recipe_manager.units.default_unit_registry
             ),
             (
                 "### Boiling Water\n"
+                "\n"
+                "Makes:\n"
+                "\n"
+                "1.0 cup Boiling water\n"
                 "\n"
                 "#### Tools\n"
                 "\n"
@@ -47,8 +56,13 @@ ureg = stray_recipe_manager.units.default_unit_registry
             CommentedRecipe(
                 name="Boiling Water",
                 comments="Utterly basic",
+                makes=Ingredient(
+                    item="Boiling water", quantity=1.0 * ureg.cup
+                ),
                 tools=["Saucepan"],
-                ingredients=[Ingredient(item="Water", quantity=1. * ureg.cup,)],
+                ingredients=[
+                    Ingredient(item="Water", quantity=1.0 * ureg.cup,)
+                ],
                 steps=[
                     RecipeStep(
                         description="Place water on stove until boiling"
@@ -57,6 +71,10 @@ ureg = stray_recipe_manager.units.default_unit_registry
             ),
             (
                 "### Boiling Water\n"
+                "\n"
+                "Makes:\n"
+                "\n"
+                "1.0 cup Boiling water\n"
                 "\n"
                 "#### Comments\n"
                 "\n"

@@ -3,4 +3,8 @@
 {% block body %}
 <h2>Recipes</h2>
 
+{% for recipe_key in recipes %}
+<h3><a href="/recipe/{{ recipe_key }}.html">{{recipe_key}}</a></h3>
+{% endfor %}
+
 {% endblock %}

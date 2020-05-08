@@ -25,6 +25,7 @@ def toml_coding():
     [
         Recipe(
             name="Boiling Water",
+            makes=Ingredient(item="Boiling water", quantity=1.0 * ureg.cup),
             tools=["Saucepan"],
             ingredients=[Ingredient(item="Water", quantity=1 * ureg.cup,)],
             steps=[
@@ -34,6 +35,7 @@ def toml_coding():
         CommentedRecipe(
             name="Boiling Water",
             comments="Utterly basic",
+            makes=Ingredient(item="Boiling water", quantity=1.0 * ureg.cup),
             tools=["Saucepan"],
             ingredients=[Ingredient(item="Water", quantity=1 * ureg.cup,)],
             steps=[
@@ -42,6 +44,7 @@ def toml_coding():
         ),
         Recipe(
             name="Boiling Water",
+            makes=Ingredient(item="Boiling water", quantity=1.0 * ureg.cup),
             tools=["Saucepan"],
             ingredients=[Ingredient(item="Water", quantity=1 * ureg.cup,)],
             steps=[
@@ -53,6 +56,7 @@ def toml_coding():
         ),
         CommentedRecipe(
             name="Boiling Water",
+            makes=Ingredient(item="Boiling water", quantity=1.0 * ureg.cup),
             comments="Utterly basic",
             tools=["Saucepan"],
             ingredients=[Ingredient(item="Water", quantity=1 * ureg.cup,)],

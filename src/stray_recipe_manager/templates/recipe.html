@@ -2,6 +2,8 @@
 {% block title %}{{ recipe.name }}{% endblock %}
 {% block body %}
 <h3>{{ recipe.name }}</h3>
+<p>Makes:</p>
+<p>{{ "{:.2f}".format(recipe.makes.quantity)}} {{ recipe.makes.item }}{% if recipe.makes.notes %}, {{recipe.makes.notes}} {% endif %}</p>
 {% if recipe.comments is defined and recipe.comments %}
 <h4>Comments</h4>
 

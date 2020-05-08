@@ -42,6 +42,8 @@ class MarkdownWriter(BaseWriter):
     def write_recipe(cls, io, recipe):
         # type: (typing.TextIO, Recipe) -> None
         io.write(f"### {recipe.name}\n")
+        io.write("\nMakes:\n")
+        io.write("\n{}\n".format(cls.format_ingredient(recipe.makes)))
         if isinstance(recipe, CommentedRecipe):
             if recipe.comments is not None:
                 io.write("\n#### Comments\n")
@@ -89,6 +91,8 @@ class HTMLWriter(BaseWriter):
         io.write(f"<head><title>{recipe.name}</title></head>")
         io.write("<body>")
         io.write(f"<h3>{recipe.name}</h3>")
+        io.write("<p>Makes:</p>")
+        io.write("<p>{}</p>".format(cls.format_ingredient(recipe.makes)))
         if isinstance(recipe, CommentedRecipe):
             if recipe.comments is not None:
                 io.write("<h4>Comments</h4>")
